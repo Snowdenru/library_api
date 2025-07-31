@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  library_api:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - DB_PATH=/app/data/library.db
+    restart: unless-stopped
+
+  swagger_ui:
+    image: swaggerapi/swagger-ui
+    ports:
+      - "8081:8080"
+    environment:
+      - URL=http://library_api:8080/api/doc
+    depends_on:
+      - library_api
